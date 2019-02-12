@@ -13,7 +13,7 @@ public class LoginController {
     @Autowired
     private LoginService loginService;
     @RequestMapping("/login")
-    public User checkLogin(){
+    public User checkLogin(){  //@RquestBody
         User user=loginService.getUserInfo("liujiawei","123456");
         return user;
     }

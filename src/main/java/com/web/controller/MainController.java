@@ -1,10 +1,7 @@
 package com.web.controller;
 
-
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
-import com.web.entity.AccessToken;
-import com.web.util.HttpUtil;
+import com.web.util.HttpThread;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -20,9 +17,9 @@ import java.util.Arrays;
 
 @CrossOrigin(origins = "*",maxAge = 3600)
 @RestController
-public class MainController {
+public class MainController implements InitializingBean {
     private final  String TOKEN="life";
-    private final String ACCESS_TOKEN_URL="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxdac092b85b46e8ba&secret=42475294a874ff28bcaa961eb820d3fe";
+    private static final String ACCESS_TOKEN_URL="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxdac092b85b46e8ba&secret=42475294a874ff28bcaa961eb820d3fe";
     @RequestMapping(path = {"/test"},method = {RequestMethod.GET})
     public void test(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         System.out.println("-----开始校验签名-----");
@@ -70,19 +67,11 @@ public class MainController {
         }
         return "";
     }
-    @RequestMapping("/getAccessToken")
-    public String getAccessToken(){
-        AccessToken accessToken=null;
-        JSONObject jsonObject= HttpUtil.doGetstr(ACCESS_TOKEN_URL);
-        if (null != jsonObject) {
-            try {
-                accessToken = new AccessToken();
-                accessToken.setAccess_token(jsonObject.getString("access_token"));
-                accessToken.setExpires_in(jsonObject.getInt("expires_in"));
-            } catch (JSONException e) {
-                accessToken = null;
-            }
-        }
-        return accessToken.getAccess_token();
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        HttpThread.url=ACCESS_TOKEN_URL;
+        Thread httpThread=new Thread(new HttpThread());
+        httpThread.start();
     }
 }

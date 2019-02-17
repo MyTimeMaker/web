@@ -1,9 +1,10 @@
 package com.web.mapper;
 
 import com.web.entity.User;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserMapper {
-    User queryUserInfo(String username,String password);
+    User queryUserInfo(@Param("username") String username, @Param("password") String password);
 }

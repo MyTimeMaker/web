@@ -30,13 +30,7 @@ public class HttpUtil {
             e.printStackTrace();
         }
         return jsonObject;
-
     }
-    /**
-     * 处理post请求
-     * @param url
-     * @return
-     */
     public static JSONObject doPoststr(String url,String outStr){
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(url);

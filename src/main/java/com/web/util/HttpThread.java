@@ -1,12 +1,25 @@
 package com.web.util;
 
 import com.web.entity.AccessToken;
+import com.web.service.HttpService;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
 public class HttpThread implements Runnable{
     public static AccessToken accessToken;
     public static String url;
+    private HttpService httpService;
+
+    public HttpThread(HttpService httpService){
+        this.httpService=httpService;
+    }
+    public AccessToken getAccessToken() {
+        return accessToken;
+    }
+
+    public void setAccessToken(AccessToken accessToken) {
+        this.accessToken = accessToken;
+    }
 
     public String getUrl() {
         return url;
@@ -16,12 +29,12 @@ public class HttpThread implements Runnable{
         this.url = url;
     }
 
-    public AccessToken getAccessToken() {
-        return accessToken;
+    public HttpService getHttpService() {
+        return httpService;
     }
 
-    public void setAccessToken(AccessToken accessToken) {
-        this.accessToken = accessToken;
+    public void setHttpService(HttpService httpService) {
+        this.httpService = httpService;
     }
 
     @Override
@@ -30,8 +43,8 @@ public class HttpThread implements Runnable{
             try {
                 accessToken=this.getAccessToken(url);
                 if(accessToken!=null){
-                    System.out.println(accessToken.getAccess_token());
-                    Thread.sleep(1000*1000);          //test10秒正式7000
+                    httpService.insertAccessToken(accessToken.getAccess_token(),accessToken.getExpires_in());
+                    Thread.sleep(7000*1000);
                 }
                 else {
                     Thread.sleep(1000*3);

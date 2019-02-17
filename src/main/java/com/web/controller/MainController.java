@@ -1,7 +1,9 @@
 package com.web.controller;
 
+import com.web.service.HttpService;
 import com.web.util.HttpThread;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +20,8 @@ import java.util.Arrays;
 @CrossOrigin(origins = "*",maxAge = 3600)
 @RestController
 public class MainController implements InitializingBean {
+    @Autowired
+    private HttpService httpService;
     private final  String TOKEN="life";
     private static final String ACCESS_TOKEN_URL="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxdac092b85b46e8ba&secret=42475294a874ff28bcaa961eb820d3fe";
     @RequestMapping(path = {"/test"},method = {RequestMethod.GET})
@@ -71,7 +75,7 @@ public class MainController implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         HttpThread.url=ACCESS_TOKEN_URL;
-        Thread httpThread=new Thread(new HttpThread());
+        Thread httpThread=new Thread(new HttpThread(httpService));
         httpThread.start();
     }
 }

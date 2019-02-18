@@ -1,7 +1,12 @@
 package com.web.controller;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.web.entity.AccessToken;
+import com.web.entity.Menu;
 import com.web.service.HttpService;
+import com.web.service.MenuService;
 import com.web.util.HttpThread;
+import com.web.util.MenuUtil;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,11 +27,13 @@ import java.util.Arrays;
 public class MainController implements InitializingBean {
     @Autowired
     private HttpService httpService;
+    @Autowired
+    private MenuService menuService;
     private final  String TOKEN="life";
     private static final String ACCESS_TOKEN_URL="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxdac092b85b46e8ba&secret=42475294a874ff28bcaa961eb820d3fe";
-    @RequestMapping(path = {"/test"},method = {RequestMethod.GET})
+    @RequestMapping(path = {"/test"},method = {RequestMethod.GET})       //检验服务器url和token，token设置为life
     public void test(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("-----开始校验签名-----");
+        System.out.println("开始校验签名");
         String signature= request.getParameter("signature");
         String timestamp=request.getParameter("timestamp");
         String nonce=request.getParameter("nonce");
@@ -34,10 +41,10 @@ public class MainController implements InitializingBean {
         String sortStr=sort(TOKEN,timestamp,nonce);
         String mySignature=shal(sortStr);
         if(!"".equals(signature)&&!"".equals(mySignature)&&signature.equals(mySignature)){
-            System.out.println("------签名校验通过------");
+            System.out.println("签名校验通过");
             response.getWriter().write(echostr);
         }else {
-            System.out.println("------签名校验失败------");
+            System.out.println("签名校验失败");
         }
     }
     public String sort(String token, String timestamp, String nonce) throws NullPointerException{
@@ -73,9 +80,18 @@ public class MainController implements InitializingBean {
     }
 
     @Override
-    public void afterPropertiesSet() throws Exception {
+    public void afterPropertiesSet() throws Exception {                 //程序启动后，自动执行的入口
         HttpThread.url=ACCESS_TOKEN_URL;
         Thread httpThread=new Thread(new HttpThread(httpService));
         httpThread.start();
+        AccessToken accessToken=httpService.getAccessToken();           //从数据库中获取access_token
+        Menu menu=menuService.createMenu();
+        Boolean createMenuBoolean=MenuUtil.createMenu(menu,accessToken.getAccess_token());
+        if(createMenuBoolean){
+            System.out.println("菜单创建成功!");
+        }
+        else {
+            System.out.println("菜单创建失败!");
+        }
     }
 }

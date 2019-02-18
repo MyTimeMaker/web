@@ -13,6 +13,7 @@ import org.apache.http.util.EntityUtils;
 
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 
 public class HttpUtil {
     public static JSONObject doGetstr(String url){
@@ -31,12 +32,12 @@ public class HttpUtil {
         }
         return jsonObject;
     }
-    public static JSONObject doPoststr(String url,String outStr){
+    public static JSONObject doPoststr(String url,String parameters){
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpPost httpPost = new HttpPost(url);
         JSONObject jsonObject = null;
         try {
-            httpPost.setEntity(new StringEntity(outStr, "utf-8"));
+            httpPost.setEntity(new StringEntity(parameters, "utf-8"));
             CloseableHttpResponse response = httpclient.execute(httpPost);
             String result = EntityUtils.toString(response.getEntity(),"utf-8");
             jsonObject =JSONObject.fromObject(result);

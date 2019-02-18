@@ -43,6 +43,7 @@ public class HttpThread implements Runnable{
             try {
                 accessToken=this.getAccessToken(url);
                 if(accessToken!=null){
+                    httpService.deleteAccessToken();
                     httpService.insertAccessToken(accessToken.getAccess_token(),accessToken.getExpires_in());
                     Thread.sleep(7000*1000);
                 }

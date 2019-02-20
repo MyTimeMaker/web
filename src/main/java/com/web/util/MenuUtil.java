@@ -2,21 +2,24 @@ package com.web.util;
 
 import com.web.entity.Menu;
 import net.sf.json.JSONObject;
-import org.apache.http.client.utils.URIBuilder;
-
-import java.net.URI;
 
 public class MenuUtil {
     public static boolean createMenu(Menu menu,String access_token){
         String url="https://api.weixin.qq.com/cgi-bin/menu/create?access_token="+access_token;
         String parameters= JSONObject.fromObject(menu).toString();
         JSONObject jsonObject=HttpUtil.doPoststr(url,parameters);
+        Boolean result=false;
         if(jsonObject!=null){
-            return true;
+            int errorCode=jsonObject.getInt("errcode");
+            String errmsg=jsonObject.getString("errmsg");
+            if (errorCode==0){
+                result=true;
+            }
+            else {
+                result=false;
+            }
         }
-        else {
-            return false;
-        }
+        return result;
     }
     public static Menu getMenu(){
         Menu menu=new Menu();

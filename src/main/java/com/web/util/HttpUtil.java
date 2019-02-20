@@ -44,6 +44,7 @@ public class HttpUtil {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println(jsonObject.toString());
         return jsonObject;
     }
 }

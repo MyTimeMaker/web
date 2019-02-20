@@ -2,7 +2,6 @@ package com.web.entity.message;
 
 import org.springframework.stereotype.Component;
 
-@Component
 public class BaseMessage {
     /*
     消息的父类，用于生成文本，图片，视频等各种消息

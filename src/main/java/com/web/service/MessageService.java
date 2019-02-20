@@ -27,6 +27,7 @@ public class MessageService {
             textMessage.setMsgType(MessageUtil.REQ_MESSAGE_TYPE_TEXT);
             if(msgType.equals(MessageUtil.RESP_MESSAGE_TYPE_TEXT)){
                 textMessage.setContent("回复成功!");
+                System.out.println(textMessage.getFromUserName());
                 responseMessage=MessageUtil.textMessageToXml(textMessage);
             }
         } catch (Exception e) {

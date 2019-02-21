@@ -27,12 +27,24 @@ public class MessageService {
             textMessage.setMsgType(MessageUtil.REQ_MESSAGE_TYPE_TEXT);
             if(msgType.equals(MessageUtil.RESP_MESSAGE_TYPE_TEXT)){
                 textMessage.setContent("回复成功!");
-                System.out.println(textMessage.getFromUserName());
                 responseMessage=MessageUtil.textMessageToXml(textMessage);
+            }else if(msgType.equals(MessageUtil.REQ_MESSAGE_TYPE_EVENT)){
+                String event=map.get("Event");
+                switch (event){
+                    case "subscribe":{
+                        textMessage.setContent("欢迎关注Life6的微信号!");
+                        responseMessage=MessageUtil.textMessageToXml(textMessage);
+                        break;
+                    }
+                    case "unsubscribe":{
+
+                    }
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println(responseMessage);
         return responseMessage;
     }
 }

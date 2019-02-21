@@ -1,16 +1,14 @@
 package com.web.entity.message;
 
-import org.springframework.stereotype.Component;
+import java.util.List;
 
-public class BaseMessage {
-    /*
-    消息的父类，用于生成文本，图片，视频等各种消息
-     */
+public class NewsMessage {
     public String ToUserName;
     public String FromUserName;
     public long CreateTime;
-
     public String MsgType;
+    private int ArticleCount;
+    private List<Article> Articles;
 
     public String getToUserName() {
         return ToUserName;
@@ -42,5 +40,21 @@ public class BaseMessage {
 
     public void setMsgType(String msgType) {
         MsgType = msgType;
+    }
+
+    public int getArticleCount() {
+        return ArticleCount;
+    }
+
+    public void setArticleCount(int articleCount) {
+        ArticleCount = articleCount;
+    }
+
+    public List<Article> getArticles() {
+        return Articles;
+    }
+
+    public void setArticles(List<Article> articles) {
+        Articles = articles;
     }
 }

@@ -1,20 +1,11 @@
 package com.web.entity.message;
 
-public class TextMessage {
-
+public class ImageMessage {
     public String ToUserName;
     public String FromUserName;
     public long CreateTime;
     public String MsgType;
-    public String Content;
-
-    public String getContent() {
-        return Content;
-    }
-
-    public void setContent(String content) {
-        Content = content;
-    }
+    private Image image;
 
     public String getToUserName() {
         return ToUserName;
@@ -47,4 +38,13 @@ public class TextMessage {
     public void setMsgType(String msgType) {
         MsgType = msgType;
     }
+
+    public Image getImage() {
+        return image;
+    }
+
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
 }
